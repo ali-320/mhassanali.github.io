@@ -28,7 +28,7 @@ function createFragments() {
   return fragments
 }
 
-function Boulder({ project, index, total }) {
+function Boulder({ project, index, total, mode, ringRotation, selectedProject }) {
   const groupRef = useRef()
   const fragmentsRef = useRef()
   const [hovered, setHovered] = useState(false)
@@ -39,33 +39,69 @@ function Boulder({ project, index, total }) {
   }
   const fragmentState = fragmentStateRef.current
   const edgeGeo = useMemo(() => new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(1.21, 0)), [])
-  const setActiveProject = useScrollStore((s) => s.setActiveProject)
-  const activeProject = useScrollStore((s) => s.activeProject)
+  const openProject = useScrollStore((s) => s.openProject)
+  const selected = selectedProject?.id === project.id
 
-  const angle = (index / (total - 1)) * Math.PI - Math.PI / 2
-  const radius = 9
-  const targetPos = useMemo(
-    () => new THREE.Vector3(Math.sin(angle) * radius, -1, Math.cos(angle) * radius - 4),
-    [angle]
-  )
+  const baseAngle = (index / total) * Math.PI * 2
+  const radius = 6
 
   useEffect(() => {
-    if (!activeProject) {
+    if (mode !== 'detail') {
       setBroken(false)
     }
-  }, [activeProject])
+  }, [mode])
+
+  useEffect(() => {
+    if (mode === 'detail' && selected) {
+      setBroken(true)
+    } else if (!selected) {
+      setBroken(false)
+    }
+  }, [mode, selected])
 
   useFrame((state) => {
     if (!groupRef.current || !fragmentsRef.current) return
     const t = state.clock.getElapsedTime()
 
-    if (!broken) {
-      groupRef.current.visible = true
-      fragmentsRef.current.visible = false
-      groupRef.current.rotation.y += 0.003
-      groupRef.current.position.y = targetPos.y + Math.sin(t * 1.5 + index) * 0.1
-      groupRef.current.scale.setScalar(hovered ? 1.1 : 1 + Math.sin(t * 2 + index) * 0.015)
+    let x = 0
+    let z = 0
+    let scale = 1
+    let visible = true
 
+    if (mode === 'normal') {
+      const angle = (index / (total - 1)) * Math.PI - Math.PI / 2
+      const r = 9
+      x = Math.sin(angle) * r
+      z = Math.cos(angle) * r - 4
+    } else if (mode === 'realm') {
+      const angle = baseAngle + ringRotation
+      x = Math.sin(angle) * radius
+      z = Math.cos(angle) * radius
+      scale = 1.3
+    } else if (mode === 'detail') {
+      visible = selected
+      if (selected) {
+        x = 0
+        z = 0
+        scale = 2.5
+      }
+    }
+
+    groupRef.current.visible = visible && !broken
+    fragmentsRef.current.visible = visible && broken
+
+    if (visible) {
+      groupRef.current.position.x = x
+      groupRef.current.position.z = z
+      groupRef.current.position.y = Math.sin(t + index) * 0.05
+      groupRef.current.rotation.y += 0.003
+      groupRef.current.scale.setScalar(hovered ? scale * 1.1 : scale)
+
+      fragmentsRef.current.position.copy(groupRef.current.position)
+      fragmentsRef.current.scale.setScalar(scale)
+    }
+
+    if (!broken) {
       fragmentsRef.current.children.forEach((mesh, i) => {
         const frag = fragmentState[i]
         if (!frag) return
@@ -73,22 +109,20 @@ function Boulder({ project, index, total }) {
         mesh.rotation.copy(frag.rotation)
       })
     } else {
-      groupRef.current.visible = false
-      fragmentsRef.current.visible = true
       fragmentsRef.current.children.forEach((mesh, i) => {
         const frag = fragmentState[i]
         if (!frag) return
-        frag.velocity.multiplyScalar(0.95)
-        mesh.position.add(frag.velocity.clone().multiplyScalar(0.02))
-        mesh.rotation.x += 0.02
-        mesh.rotation.y += 0.015
+        frag.velocity.multiplyScalar(0.98)
+        mesh.position.add(frag.velocity.clone().multiplyScalar(0.015))
+        mesh.rotation.x += 0.015
+        mesh.rotation.y += 0.01
       })
     }
   })
 
   const handleClick = (e) => {
     e.stopPropagation()
-    if (!broken) {
+    if (mode === 'realm' && !broken) {
       fragmentState.forEach((frag) => {
         frag.position.set(0, 0, 0)
         frag.velocity.set(
@@ -98,12 +132,14 @@ function Boulder({ project, index, total }) {
         )
       })
       setBroken(true)
-      setActiveProject(project)
+      openProject(project)
     }
   }
 
+  if (mode === 'detail' && !selected) return null
+
   return (
-    <group position={targetPos}>
+    <group>
       <group
         ref={groupRef}
         onClick={handleClick}
@@ -117,18 +153,18 @@ function Boulder({ project, index, total }) {
             roughness={0.95}
             metalness={0.05}
             emissive={project.color}
-            emissiveIntensity={hovered ? 0.25 : 0.08}
+            emissiveIntensity={hovered ? 0.4 : 0.15}
           />
         </mesh>
         <lineSegments geometry={edgeGeo}>
-          <lineBasicMaterial color="#B8860B" transparent opacity={hovered ? 0.6 : 0.3} />
+          <lineBasicMaterial color="#B8860B" transparent opacity={hovered ? 0.8 : 0.4} />
         </lineSegments>
-        {!broken && (
-          <Html distanceFactor={15} position={[0, 1.8, 0]} center>
-          <div className="pointer-events-none whitespace-nowrap rounded border border-accentGold/30 bg-stoneBlack/80 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-stoneWhite/90">
-            {project.title}
-          </div>
-        </Html>
+        {mode === 'realm' && !broken && (
+          <Html distanceFactor={12} position={[0, 1.6, 0]} center>
+            <div className="pointer-events-none whitespace-nowrap rounded border border-accentGold/30 bg-stoneBlack/80 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-stoneWhite/90">
+              {project.title}
+            </div>
+          </Html>
         )}
       </group>
 
@@ -141,7 +177,7 @@ function Boulder({ project, index, total }) {
               roughness={0.9}
               metalness={0.1}
               emissive={project.color}
-              emissiveIntensity={0.2}
+              emissiveIntensity={0.3}
             />
           </mesh>
         ))}
@@ -150,11 +186,19 @@ function Boulder({ project, index, total }) {
   )
 }
 
-export default function ProjectBoulders() {
+export default function ProjectBoulders({ mode, rotation, selectedProject }) {
   return (
     <>
       {projects.map((project, i) => (
-        <Boulder key={project.id} project={project} index={i} total={projects.length} />
+        <Boulder
+          key={project.id}
+          project={project}
+          index={i}
+          total={projects.length}
+          mode={mode}
+          ringRotation={rotation}
+          selectedProject={selectedProject}
+        />
       ))}
     </>
   )

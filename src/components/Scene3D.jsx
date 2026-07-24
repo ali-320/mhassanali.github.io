@@ -31,10 +31,15 @@ function StoneFloor() {
 }
 
 export default function Scene3D() {
-  const { camera } = useThree()
+  const { camera, gl } = useThree()
   const progress = useScrollStore((s) => s.progress)
   const currentSection = useScrollStore((s) => s.currentSection)
+  const projectsMode = useScrollStore((s) => s.projectsMode)
+  const selectedProject = useScrollStore((s) => s.selectedProject)
+  const boulderRotation = useScrollStore((s) => s.boulderRotation)
+  const rotateBoulders = useScrollStore((s) => s.rotateBoulders)
   const targetCamera = useRef(new THREE.Vector3(0, 0, 12))
+  const currentCameraTarget = useRef(new THREE.Vector3(0, 0, 0))
 
   const pillars = useMemo(
     () =>
@@ -55,38 +60,65 @@ export default function Scene3D() {
     switch (section) {
       case 'hero':
         targetCamera.current.set(0, 0, 12)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'about':
         targetCamera.current.set(5, 0, 10)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'skills':
         targetCamera.current.set(-5, 1, 9)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'experience':
         targetCamera.current.set(4, 0, 10)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'projects':
         targetCamera.current.set(0, 0, 14)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'honors':
         targetCamera.current.set(-3, 0, 11)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       case 'contact':
         targetCamera.current.set(0, 0, 10)
+        currentCameraTarget.current.set(0, 0, 0)
         break
       default:
         targetCamera.current.set(0, 0, 12)
+        currentCameraTarget.current.set(0, 0, 0)
     }
   }, [currentSection])
 
-  useFrame(() => {
+  useEffect(() => {
+    const canvas = gl.domElement
+    const handleWheel = (e) => {
+      if (projectsMode === 'realm') {
+        e.preventDefault()
+        rotateBoulders(e.deltaY * 0.001)
+      }
+    }
+    canvas.addEventListener('wheel', handleWheel, { passive: false })
+    return () => canvas.removeEventListener('wheel', handleWheel)
+  }, [gl.domElement, projectsMode, rotateBoulders])
+
+  useFrame((state) => {
+    let desired = targetCamera.current.clone()
+
+    if (projectsMode === 'realm') {
+      desired.set(0, 3, 18)
+    } else if (projectsMode === 'detail' && selectedProject) {
+      desired.set(0, 1, 10)
+    }
+
     const horizontal = Math.sin(progress * Math.PI * 2) * 2
     const vertical = Math.cos(progress * Math.PI * 1.5) * 1
-    const desired = targetCamera.current.clone()
     desired.x += horizontal
     desired.y += vertical
     camera.position.lerp(desired, 0.03)
-    camera.lookAt(0, 0, 0)
+    camera.lookAt(currentCameraTarget.current)
   })
 
   return (
@@ -97,7 +129,7 @@ export default function Scene3D() {
       {pillars.map((p, i) => (
         <StonePillar key={i} position={p.position} height={p.height} color={p.color} />
       ))}
-      <ProjectBoulders />
+      <ProjectBoulders mode={projectsMode} rotation={boulderRotation} selectedProject={selectedProject} />
     </>
   )
 }

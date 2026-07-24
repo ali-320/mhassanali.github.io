@@ -10,8 +10,12 @@ gsap.registerPlugin(ScrollTrigger)
 
 function App() {
   const scrollRef = useRef({ progress: 0, current: 0 })
+  const lenisRef = useRef(null)
   const setProgress = useScrollStore((s) => s.setProgress)
   const setCurrentSection = useScrollStore((s) => s.setCurrentSection)
+  const projectsMode = useScrollStore((s) => s.projectsMode)
+  const enterRealm = useScrollStore((s) => s.enterRealm)
+  const exitRealm = useScrollStore((s) => s.exitRealm)
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -23,6 +27,7 @@ function App() {
       wheelMultiplier: 0.8,
       touchMultiplier: 1.5,
     })
+    lenisRef.current = lenis
 
     lenis.on('scroll', (e) => {
       scrollRef.current = { progress: e.progress, current: e.scroll }
@@ -36,7 +41,6 @@ function App() {
     }
     requestAnimationFrame(raf)
 
-    // Section observers
     const sections = document.querySelectorAll('[data-section]')
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,10 +60,34 @@ function App() {
     }
   }, [setProgress, setCurrentSection])
 
+  useEffect(() => {
+    const lenis = lenisRef.current
+    if (!lenis) return
+    if (projectsMode === 'realm' || projectsMode === 'detail') {
+      lenis.stop()
+    } else {
+      lenis.start()
+    }
+  }, [projectsMode])
+
+  const isRealm = projectsMode === 'realm'
+  const isDetail = projectsMode === 'detail'
+
   return (
     <div className="relative min-h-screen w-full bg-stoneBlack">
       <CanvasContainer />
-      <main className="relative z-10 w-full">
+
+      {/* Fixed back button for realm/detail views */}
+      {(isRealm || isDetail) && (
+        <button
+          onClick={exitRealm}
+          className="pointer-events-auto fixed left-6 top-6 z-50 flex items-center gap-2 border border-steelBlue/50 bg-stoneBlack/80 px-4 py-2 font-hud uppercase tracking-widest text-steelBlue backdrop-blur-sm transition-all hover:bg-steelBlue hover:text-stoneBlack"
+        >
+          <span className="text-lg">←</span> Back to Gallery
+        </button>
+      )}
+
+      <main className="relative z-10 w-full pointer-events-none">
         <section
           data-section="hero"
           className="relative flex h-screen w-full flex-col items-center justify-center px-6 text-center"
@@ -155,11 +183,30 @@ function App() {
           data-section="projects"
           className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 py-24 text-center"
         >
-          <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">The Relic Gallery</h2>
-          <p className="mt-4 max-w-2xl font-mono text-sm text-stoneWhite/70 md:text-base">
-            Click a boulder to break it and reveal the project within.
-          </p>
-          <div className="pointer-events-none mt-8 text-xs text-stoneWhite/40">Use the 3D scene behind this overlay</div>
+          <div
+            className={`transition-all duration-700 ${
+              isRealm || isDetail ? 'pointer-events-none opacity-0' : 'pointer-events-auto opacity-100'
+            }`}
+          >
+            <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">The Relic Gallery</h2>
+            <p className="mt-4 max-w-2xl font-mono text-sm text-stoneWhite/70 md:text-base">
+              Step into the realm where each artifact holds a project.
+            </p>
+            <button
+              onClick={enterRealm}
+              className="pointer-events-auto mt-8 border border-accentGold/50 bg-accentGold/10 px-8 py-3 font-hud uppercase tracking-widest text-accentGold transition-all hover:bg-accentGold hover:text-stoneBlack"
+            >
+              Enter the Project Realm
+            </button>
+          </div>
+
+          <div
+            className={`pointer-events-none mt-8 text-xs text-stoneWhite/40 transition-opacity duration-700 ${
+              isRealm || isDetail ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            Use the 3D scene behind this overlay
+          </div>
         </section>
 
         <section
@@ -191,16 +238,16 @@ function App() {
         >
           <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">Forge a Connection</h2>
           <div className="mt-10 flex flex-col items-center gap-4 font-mono text-sm text-stoneWhite/80">
-            <a href="mailto:mhali.bese23seecs@seecs.edu.pk" className="hover:text-accentGold transition-colors">
+            <a href="mailto:mhali.bese23seecs@seecs.edu.pk" className="pointer-events-auto hover:text-accentGold transition-colors">
               mhali.bese23seecs@seecs.edu.pk
             </a>
-            <a href="mailto:ha0407351@gmail.com" className="hover:text-accentGold transition-colors">
+            <a href="mailto:ha0407351@gmail.com" className="pointer-events-auto hover:text-accentGold transition-colors">
               ha0407351@gmail.com
             </a>
-            <a href="tel:+923229053561" className="hover:text-accentGold transition-colors">
+            <a href="tel:+923229053561" className="pointer-events-auto hover:text-accentGold transition-colors">
               +92 322-9053561
             </a>
-            <a href="https://github.com/ali-320" target="_blank" rel="noreferrer" className="hover:text-accentGold transition-colors">
+            <a href="https://github.com/ali-320" target="_blank" rel="noreferrer" className="pointer-events-auto hover:text-accentGold transition-colors">
               github.com/ali-320
             </a>
           </div>
