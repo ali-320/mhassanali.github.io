@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useScrollStore } from '../store/scrollStore'
-import { ExternalLink, Github, X, Cpu, Radio, ArrowLeft } from 'lucide-react'
+import { ExternalLink, Github, Cpu, Radio, ArrowLeft } from 'lucide-react'
 
 export default function GameMenu() {
   const selectedProject = useScrollStore((s) => s.selectedProject)
@@ -15,6 +15,17 @@ export default function GameMenu() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [closeProject])
 
+  // Stop wheel events from reaching Lenis so the menu can scroll
+  useEffect(() => {
+    const node = overlayRef.current
+    if (!node) return
+    const handleWheel = (e) => {
+      e.stopPropagation()
+    }
+    node.addEventListener('wheel', handleWheel, { passive: true, capture: true })
+    return () => node.removeEventListener('wheel', handleWheel, { capture: true })
+  }, [selectedProject])
+
   if (!selectedProject) return null
 
   return (
@@ -28,7 +39,7 @@ export default function GameMenu() {
       aria-label={`Project ${selectedProject.title}`}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-5xl overflow-y-auto border border-accentGold/50 bg-stoneBlack/95 p-6 shadow-[0_0_60px_rgba(184,134,11,0.15)] md:p-10"
+        className="relative z-10 max-h-[90vh] w-full max-w-5xl overflow-y-auto border border-accentGold/50 bg-stoneBlack/95 p-6 shadow-[0_0_60px_rgba(184,134,11,0.15)] md:p-10"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="hud-corner absolute inset-0" />
@@ -46,20 +57,14 @@ export default function GameMenu() {
               <span className="animate-blink text-accentGold">_</span>
             </h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="pointer-events-auto flex items-center gap-2">
             <button
+              type="button"
               onClick={() => closeProject()}
-              className="flex items-center gap-2 border border-rockHighlight px-3 py-2 font-hud text-xs uppercase tracking-widest text-stoneWhite transition-colors hover:border-accentGold hover:text-accentGold"
+              className="relative z-20 flex items-center gap-2 border border-rockHighlight px-3 py-2 font-hud text-xs uppercase tracking-widest text-stoneWhite transition-colors hover:border-accentGold hover:text-accentGold"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Relics
-            </button>
-            <button
-              onClick={() => closeProject()}
-              className="border border-rockHighlight p-2 text-stoneWhite transition-colors hover:border-accentGold hover:text-accentGold"
-              aria-label="Close project details"
-            >
-              <X className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -112,12 +117,13 @@ export default function GameMenu() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-rockHighlight/50 pt-6 md:flex-row">
+        <div className="pointer-events-auto mt-10 flex flex-col gap-4 border-t border-rockHighlight/50 pt-6 md:flex-row">
           <a
             href={selectedProject.repo}
             target="_blank"
-            rel="noreferrer"
-            className="group flex flex-1 items-center justify-center gap-2 border border-accentGold/50 bg-accentGold/10 py-3 font-hud uppercase tracking-wider text-accentGold transition-all hover:bg-accentGold hover:text-stoneBlack"
+            rel="noopener noreferrer"
+            className="pointer-events-auto relative z-20 flex flex-1 items-center justify-center gap-2 border border-accentGold/50 bg-accentGold/10 py-3 font-hud uppercase tracking-wider text-accentGold transition-all hover:bg-accentGold hover:text-stoneBlack"
+            onClick={(e) => e.stopPropagation()}
           >
             <Github className="h-4 w-4" />
             Repository
@@ -126,8 +132,9 @@ export default function GameMenu() {
             <a
               href={selectedProject.deployment}
               target="_blank"
-              rel="noreferrer"
-              className="group flex flex-1 items-center justify-center gap-2 border border-steelBlue/50 bg-steelBlue/10 py-3 font-hud uppercase tracking-wider text-steelBlue transition-all hover:bg-steelBlue hover:text-stoneBlack"
+              rel="noopener noreferrer"
+              className="pointer-events-auto relative z-20 flex flex-1 items-center justify-center gap-2 border border-steelBlue/50 bg-steelBlue/10 py-3 font-hud uppercase tracking-wider text-steelBlue transition-all hover:bg-steelBlue hover:text-stoneBlack"
+              onClick={(e) => e.stopPropagation()}
             >
               <Radio className="h-4 w-4" />
               Deployment
