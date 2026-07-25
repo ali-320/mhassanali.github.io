@@ -1,12 +1,14 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { audioManager } from '../utils/audioManager'
 import { useAudioStore } from '../store/audioStore'
+import { getAmplitudeAtTime } from '../utils/audioAnalyzer'
+import { audioManager } from '../utils/audioManager'
 
 export default function DustParticles({ count = 600 }) {
   const meshRef = useRef()
   const isMuted = useAudioStore((s) => s.isMuted)
+  const audioData = useAudioStore((s) => s.audioData)
 
   const [positions, velocities] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -27,8 +29,9 @@ export default function DustParticles({ count = 600 }) {
   useFrame(({ clock }) => {
     if (!meshRef.current) return
     const t = clock.getElapsedTime()
-    const freq = isMuted ? 0 : audioManager.getAverageFrequency()
-    const amplifier = 1 + freq * 4
+    const currentTime = audioManager.audio?.currentTime ?? 0
+    const amplitude = isMuted ? 0 : getAmplitudeAtTime(audioData, currentTime)
+    const amplifier = 1 + amplitude * 4
     const pos = meshRef.current.geometry.attributes.position.array
     for (let i = 0; i < count; i++) {
       pos[i * 3] += (velocities[i].x + Math.sin(t * 0.2 + i) * 0.002) * amplifier
@@ -43,7 +46,7 @@ export default function DustParticles({ count = 600 }) {
 
     const material = meshRef.current.material
     if (material) {
-      material.size = 0.08 + freq * 0.08
+      material.size = 0.08 + amplitude * 0.08
     }
   })
 

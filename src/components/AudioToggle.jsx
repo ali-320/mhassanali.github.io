@@ -2,9 +2,6 @@ import { useAudioStore } from '../store/audioStore'
 import { audioManager } from '../utils/audioManager'
 import { Volume2, VolumeX, AlertCircle } from 'lucide-react'
 
-// Google Drive shared file link converted to a direct-ish download endpoint.
-// Note: Google Drive may still block cross-origin streaming (CORS). If playback fails,
-// host the .mp3 on a service that serves files directly (Google Cloud Storage, GitHub raw, etc.).
 const MUSIC_URL = 'https://raw.githubusercontent.com/ali-320/resources-websites/main/Kari_Sigurdsson_-_Skyline__Epic_Modern_Heroic_Hybrid_(256k).mp3'
 
 export default function AudioToggle() {
@@ -16,6 +13,7 @@ export default function AudioToggle() {
     }
 
     const nextMuted = !isMuted
+    audioManager.setMuted(nextMuted)
     if (nextMuted) {
       audioManager.pause()
     } else {

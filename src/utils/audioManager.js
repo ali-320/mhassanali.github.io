@@ -21,7 +21,7 @@ class AudioManager {
     this.audio.addEventListener('error', () => {
       // eslint-disable-next-line no-console
       console.error('[AudioManager] Failed to load audio:', url)
-      useAudioStore.getState().setLoadError('Could not load audio. Google Drive links often block playback—try a direct .mp3 host.')
+      useAudioStore.getState().setLoadError('Could not load audio. Try a direct .mp3 host.')
     })
 
     this.audio.addEventListener('canplaythrough', () => {
@@ -45,6 +45,15 @@ class AudioManager {
     }
   }
 
+  async playUnmuted() {
+    if (!this.context) return Promise.reject(new Error('Audio not set up'))
+    if (this.context.state === 'suspended') {
+      await this.context.resume()
+    }
+    this.audio.muted = false
+    await this.audio.play()
+  }
+
   play() {
     if (!this.context) return
     if (this.context.state === 'suspended') {
@@ -55,6 +64,12 @@ class AudioManager {
 
   pause() {
     this.audio?.pause()
+  }
+
+  setMuted(muted) {
+    if (this.audio) {
+      this.audio.muted = muted
+    }
   }
 
   getAverageFrequency() {

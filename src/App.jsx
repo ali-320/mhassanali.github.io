@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import CanvasContainer from './components/CanvasContainer'
 import GameMenu from './components/GameMenu'
 import AudioToggle from './components/AudioToggle'
+import LoadingScreen from './components/LoadingScreen'
 import { useScrollStore } from './store/scrollStore'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -82,6 +83,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-stoneBlack">
+      <LoadingScreen />
       <CanvasContainer />
       <AudioToggle />
 
