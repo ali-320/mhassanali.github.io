@@ -1,9 +1,12 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { audioManager } from '../utils/audioManager'
+import { useAudioStore } from '../store/audioStore'
 
 export default function DustParticles({ count = 600 }) {
   const meshRef = useRef()
+  const isMuted = useAudioStore((s) => s.isMuted)
 
   const [positions, velocities] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -24,17 +27,24 @@ export default function DustParticles({ count = 600 }) {
   useFrame(({ clock }) => {
     if (!meshRef.current) return
     const t = clock.getElapsedTime()
+    const freq = isMuted ? 0 : audioManager.getAverageFrequency()
+    const amplifier = 1 + freq * 4
     const pos = meshRef.current.geometry.attributes.position.array
     for (let i = 0; i < count; i++) {
-      pos[i * 3] += velocities[i].x + Math.sin(t * 0.2 + i) * 0.002
-      pos[i * 3 + 1] += velocities[i].y + Math.cos(t * 0.15 + i) * 0.002
-      pos[i * 3 + 2] += velocities[i].z
+      pos[i * 3] += (velocities[i].x + Math.sin(t * 0.2 + i) * 0.002) * amplifier
+      pos[i * 3 + 1] += (velocities[i].y + Math.cos(t * 0.15 + i) * 0.002) * amplifier
+      pos[i * 3 + 2] += velocities[i].z * amplifier
       if (pos[i * 3 + 1] > 25) pos[i * 3 + 1] = -20
       if (pos[i * 3 + 1] < -25) pos[i * 3 + 1] = 20
       if (pos[i * 3] > 30) pos[i * 3] = -30
       if (pos[i * 3] < -30) pos[i * 3] = 30
     }
     meshRef.current.geometry.attributes.position.needsUpdate = true
+
+    const material = meshRef.current.material
+    if (material) {
+      material.size = 0.08 + freq * 0.08
+    }
   })
 
   return (

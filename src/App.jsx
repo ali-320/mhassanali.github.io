@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import CanvasContainer from './components/CanvasContainer'
 import GameMenu from './components/GameMenu'
+import AudioToggle from './components/AudioToggle'
 import { useScrollStore } from './store/scrollStore'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -65,8 +66,14 @@ function App() {
     if (!lenis) return
     if (projectsMode === 'realm' || projectsMode === 'detail') {
       lenis.stop()
+      document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
+      document.documentElement.classList.add('lenis-stopped')
     } else {
       lenis.start()
+      document.body.style.overflow = ''
+      document.body.style.touchAction = ''
+      document.documentElement.classList.remove('lenis-stopped')
     }
   }, [projectsMode])
 
@@ -76,6 +83,7 @@ function App() {
   return (
     <div className="relative min-h-screen w-full bg-stoneBlack">
       <CanvasContainer />
+      <AudioToggle />
 
       {/* Fixed back button for realm/detail views */}
       {(isRealm || isDetail) && (
