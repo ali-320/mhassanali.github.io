@@ -136,7 +136,9 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
     }
   }
 
-  if (mode === 'detail' && !selected) return null
+  if (mode === 'detail' && !selected) {
+    return <group visible={false} />
+  }
 
   return (
     <group>

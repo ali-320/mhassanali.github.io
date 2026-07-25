@@ -19,8 +19,9 @@ export default function GameMenu() {
 
   return (
     <div
+      key={selectedProject.id}
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-stoneBlack/92 p-4 scanlines backdrop-blur-sm"
+      className="pointer-events-auto fixed inset-0 z-[100] flex items-center justify-center bg-stoneBlack/92 p-4 scanlines backdrop-blur-sm"
       onClick={() => closeProject()}
       role="dialog"
       aria-modal="true"

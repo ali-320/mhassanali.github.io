@@ -81,7 +81,7 @@ function App() {
       {(isRealm || isDetail) && (
         <button
           onClick={exitRealm}
-          className="pointer-events-auto fixed left-6 top-6 z-50 flex items-center gap-2 border border-steelBlue/50 bg-stoneBlack/80 px-4 py-2 font-hud uppercase tracking-widest text-steelBlue backdrop-blur-sm transition-all hover:bg-steelBlue hover:text-stoneBlack"
+          className="pointer-events-auto fixed left-6 top-6 z-50 flex items-center gap-2 border border-danger/50 bg-danger/10 px-4 py-2 font-hud uppercase tracking-widest text-danger backdrop-blur-sm transition-all hover:bg-danger hover:text-stoneWhite"
         >
           <span className="text-lg">←</span> Back to Gallery
         </button>

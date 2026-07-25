@@ -62,11 +62,6 @@ body {
 }
 
 /* Game menu scanlines */
-.scanlines {
-  position: relative;
-  overflow: hidden;
-}
-
 .scanlines::after {
   content: '';
   position: absolute;
