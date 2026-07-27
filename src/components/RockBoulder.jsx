@@ -155,11 +155,11 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
             roughness={0.95}
             metalness={0.05}
             emissive={project.color}
-            emissiveIntensity={hovered ? 0.4 : 0.15}
+            emissiveIntensity={hovered && mode === 'realm' ? 0.4 : 0.15}
           />
         </mesh>
         <lineSegments geometry={edgeGeo}>
-          <lineBasicMaterial color="#B8860B" transparent opacity={hovered ? 0.8 : 0.4} />
+          <lineBasicMaterial color="#B8860B" transparent opacity={hovered && mode === 'realm' ? 0.8 : 0.4} />
         </lineSegments>
         {mode === 'realm' && !broken && (
           <Html distanceFactor={12} position={[0, 1.6, 0]} center>
