@@ -95,7 +95,7 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
       groupRef.current.position.z = z
       groupRef.current.position.y = Math.sin(t + index) * 0.05
       groupRef.current.rotation.y += 0.003
-      groupRef.current.scale.setScalar(hovered ? scale * 1.1 : scale)
+      groupRef.current.scale.setScalar(hovered && mode === 'realm' ? scale * 1.1 : scale)
 
       fragmentsRef.current.position.copy(groupRef.current.position)
       fragmentsRef.current.scale.setScalar(scale)

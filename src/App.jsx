@@ -101,7 +101,12 @@ function App() {
         </button>
       )}
 
-      <main className="relative z-10 w-full pointer-events-none">
+      <main
+        className={`relative z-10 w-full pointer-events-none transition-opacity duration-700 ${
+          isRealm || isDetail ? 'opacity-0' : 'opacity-100'
+        }`}
+        aria-hidden={isRealm || isDetail}
+      >
         <section
           data-section="hero"
           className="relative flex h-screen w-full flex-col items-center justify-center px-6 text-center"
