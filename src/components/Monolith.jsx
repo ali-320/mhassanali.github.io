@@ -31,7 +31,7 @@ export default function Monolith() {
   })
 
   return (
-    <mesh ref={ref} geometry={geometry} position={[0, -1, 0]} castShadow receiveShadow>
+    <mesh ref={ref} geometry={geometry} position={[0, -1, 0]} castShadow receiveShadow raycast={null}>
       <meshStandardMaterial
         color="#2C2E33"
         roughness={0.9}

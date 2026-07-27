@@ -162,7 +162,7 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
           <lineBasicMaterial color="#B8860B" transparent opacity={hovered && mode === 'realm' ? 0.8 : 0.4} />
         </lineSegments>
         {mode === 'realm' && !broken && (
-          <Html distanceFactor={12} position={[0, 1.6, 0]} center>
+          <Html distanceFactor={12} position={[0, 1.6, 0]} center pointerEvents="none">
             <div className="pointer-events-none whitespace-nowrap rounded border border-accentGold/30 bg-stoneBlack/80 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-stoneWhite/90">
               {project.title}
             </div>

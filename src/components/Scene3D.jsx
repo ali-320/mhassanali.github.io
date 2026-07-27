@@ -14,7 +14,7 @@ function StonePillar({ position, height, color }) {
     ref.current.position.y = position[1] + Math.sin(t + position[0]) * 0.05
   })
   return (
-    <mesh ref={ref} position={position} castShadow receiveShadow>
+    <mesh ref={ref} position={position} castShadow receiveShadow raycast={null}>
       <cylinderGeometry args={[0.4, 0.5, height, 8]} />
       <meshStandardMaterial color={color} roughness={0.9} metalness={0.05} />
     </mesh>
@@ -23,7 +23,7 @@ function StonePillar({ position, height, color }) {
 
 function StoneFloor() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, 0]} receiveShadow>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4, 0]} receiveShadow raycast={null}>
       <planeGeometry args={[120, 120]} />
       <meshStandardMaterial color="#0B0C0E" roughness={1} metalness={0} />
     </mesh>
