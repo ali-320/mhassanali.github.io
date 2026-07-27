@@ -16,6 +16,7 @@ export default function LoadingScreen({ onComplete }) {
   const [visible, setVisible] = useState(true)
   const [messageIndex, setMessageIndex] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [showEnter, setShowEnter] = useState(false)
   const setAudioData = useAudioStore((s) => s.setAudioData)
   const setLoading = useAudioStore((s) => s.setLoading)
   const setLoadError = useAudioStore((s) => s.setLoadError)
@@ -68,31 +69,35 @@ export default function LoadingScreen({ onComplete }) {
     return () => clearInterval(interval)
   }, [])
 
-  // Finish loading once progress is complete
+  // Show the enter button once progress is complete
   useEffect(() => {
     if (progress < 100) return
 
     const timer = setTimeout(() => {
-      setVisible(false)
-      setLoading(false)
-
-      // Setup and start playback
-      audioManager.setup(MUSIC_URL)
-      audioManager
-        .playUnmuted()
-        .then(() => {
-          setMuted(false)
-        })
-        .catch(() => {
-          setMuted(true)
-          setLoadError('Autoplay blocked. Click the mute button to enable music.')
-        })
-
-      onComplete?.()
+      setShowEnter(true)
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [progress, onComplete, setLoading, setMuted, setLoadError])
+  }, [progress])
+
+  const handleEnter = () => {
+    setVisible(false)
+    setLoading(false)
+
+    // Setup and start playback from a user gesture
+    audioManager.setup(MUSIC_URL)
+    audioManager
+      .playUnmuted()
+      .then(() => {
+        setMuted(false)
+      })
+      .catch(() => {
+        setMuted(true)
+        setLoadError('Autoplay blocked. Click the mute button to enable music.')
+      })
+
+    onComplete?.()
+  }
 
   if (!visible) return null
 
@@ -106,12 +111,22 @@ export default function LoadingScreen({ onComplete }) {
         {MESSAGES[messageIndex]}
         <span className="animate-blink text-accentGold">_</span>
       </p>
-      <div className="mt-8 h-1 w-64 overflow-hidden border border-rockHighlight/50 bg-carvedRock/30 md:w-96">
-        <div
-          className="h-full bg-accentGold transition-all duration-100 ease-linear"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+      {showEnter ? (
+        <button
+          onClick={handleEnter}
+          className="mt-8 border border-accentGold/50 bg-stoneBlack/80 px-8 py-3 font-hud text-sm uppercase tracking-widest text-accentGold backdrop-blur-sm transition-all hover:bg-accentGold hover:text-stoneBlack focus:outline-none focus:ring-2 focus:ring-accentGold/50"
+          autoFocus
+        >
+          Click to Enter
+        </button>
+      ) : (
+        <div className="mt-8 h-1 w-64 overflow-hidden border border-rockHighlight/50 bg-carvedRock/30 md:w-96">
+          <div
+            className="h-full bg-accentGold transition-all duration-100 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
     </div>
   )
 }
