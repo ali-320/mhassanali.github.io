@@ -6,6 +6,7 @@ import CanvasContainer from './components/CanvasContainer'
 import GameMenu from './components/GameMenu'
 import AudioToggle from './components/AudioToggle'
 import LoadingScreen from './components/LoadingScreen'
+import NavBar from './components/NavBar'
 import { useScrollStore } from './store/scrollStore'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -13,6 +14,7 @@ gsap.registerPlugin(ScrollTrigger)
 function App() {
   const scrollRef = useRef({ progress: 0, current: 0 })
   const lenisRef = useRef(null)
+  const setLenisRef = useScrollStore((s) => s.setLenisRef)
   const setProgress = useScrollStore((s) => s.setProgress)
   const setCurrentSection = useScrollStore((s) => s.setCurrentSection)
   const projectsMode = useScrollStore((s) => s.projectsMode)
@@ -30,6 +32,7 @@ function App() {
       touchMultiplier: 1.5,
     })
     lenisRef.current = lenis
+    setLenisRef(lenisRef)
 
     lenis.on('scroll', (e) => {
       scrollRef.current = { progress: e.progress, current: e.scroll }
@@ -86,6 +89,7 @@ function App() {
       <LoadingScreen />
       <CanvasContainer />
       <AudioToggle />
+      <NavBar />
 
       {/* Fixed back button for realm/detail views */}
       {(isRealm || isDetail) && (

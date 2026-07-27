@@ -6,8 +6,10 @@ export const useScrollStore = create((set) => ({
   projectsMode: 'normal', // 'normal' | 'realm' | 'detail'
   selectedProject: null,
   boulderRotation: 0,
+  lenisRef: null,
   setProgress: (p) => set({ progress: p }),
   setCurrentSection: (s) => set({ currentSection: s }),
+  setLenisRef: (ref) => set({ lenisRef: ref }),
   enterRealm: () => set({ projectsMode: 'realm', selectedProject: null }),
   exitRealm: () => set({ projectsMode: 'normal', selectedProject: null, boulderRotation: 0 }),
   openProject: (project) => set({ projectsMode: 'detail', selectedProject: project }),
