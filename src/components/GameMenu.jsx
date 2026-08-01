@@ -39,9 +39,10 @@ export default function GameMenu() {
       aria-label={`Project ${selectedProject.title}`}
     >
       <div
-        className="relative z-10 max-h-[calc(100dvh-1rem)] w-full max-w-5xl min-w-0 overflow-y-auto overscroll-contain border border-accentGold/50 bg-stoneBlack/95 p-4 shadow-[0_0_60px_rgba(184,134,11,0.15)] sm:max-h-[90vh] sm:p-6 md:p-10"
+        className="project-menu-scroll relative z-10 max-h-[calc(100dvh-1rem)] w-full max-w-5xl min-w-0 overflow-y-auto overscroll-contain border border-accentGold/50 bg-stoneBlack/95 p-4 shadow-[0_0_60px_rgba(184,134,11,0.15)] sm:max-h-[90vh] sm:p-6 md:p-10"
         onClick={(e) => e.stopPropagation()}
         onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         <div className="hud-corner absolute inset-0" />
 

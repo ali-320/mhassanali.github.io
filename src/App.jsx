@@ -71,12 +71,10 @@ function App() {
     if (projectsMode === 'realm' || projectsMode === 'detail') {
       lenis.stop()
       document.body.style.overflow = 'hidden'
-      document.body.style.touchAction = 'none'
       document.documentElement.classList.add('lenis-stopped')
     } else {
       lenis.start()
       document.body.style.overflow = ''
-      document.body.style.touchAction = ''
       document.documentElement.classList.remove('lenis-stopped')
     }
   }, [projectsMode])

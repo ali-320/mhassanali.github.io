@@ -78,6 +78,12 @@ a {
   background: var(--gold);
 }
 
+/* Keep the project detail panel independently scrollable on touch devices. */
+.project-menu-scroll {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Game menu scanlines */
 .scanlines::after {
   content: '';
