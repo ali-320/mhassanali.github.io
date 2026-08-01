@@ -23,10 +23,10 @@ export default function AudioToggle() {
   }
 
   return (
-    <div className="pointer-events-auto fixed right-6 top-6 z-50 flex flex-col items-end gap-2">
+    <div className="pointer-events-auto fixed right-4 top-4 z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:right-6 sm:top-6">
       <button
         onClick={handleClick}
-        className="flex items-center gap-2 border border-accentGold/50 bg-stoneBlack/80 px-4 py-2 font-hud text-xs uppercase tracking-widest text-accentGold backdrop-blur-sm transition-all hover:bg-accentGold hover:text-stoneBlack"
+        className="flex min-h-11 items-center gap-2 border border-accentGold/50 bg-stoneBlack/80 px-3 py-2 font-hud text-[11px] uppercase tracking-widest text-accentGold backdrop-blur-sm transition-all hover:bg-accentGold hover:text-stoneBlack sm:px-4 sm:text-xs"
         aria-label={isMuted ? 'Unmute music' : 'Mute music'}
       >
         {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -34,7 +34,7 @@ export default function AudioToggle() {
       </button>
       {loadError && (
         <div
-          className="flex max-w-xs items-start gap-2 border border-danger/50 bg-stoneBlack/95 p-2 text-xs text-danger backdrop-blur-sm"
+          className="flex max-w-[calc(100vw-2rem)] items-start gap-2 border border-danger/50 bg-stoneBlack/95 p-2 text-xs text-danger backdrop-blur-sm"
           onClick={() => clearLoadError()}
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />

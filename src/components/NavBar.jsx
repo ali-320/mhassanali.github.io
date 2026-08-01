@@ -42,10 +42,11 @@ export default function NavBar() {
   }
 
   return (
-    <nav
-      aria-label="Section navigation"
-      className="pointer-events-auto fixed right-8 top-1/2 z-40 hidden -translate-y-1/2 md:block"
-    >
+    <>
+      <nav
+        aria-label="Section navigation"
+        className="pointer-events-auto fixed right-8 top-1/2 z-40 hidden -translate-y-1/2 md:block"
+      >
       <ol className="flex flex-col items-end gap-5" role="list">
         {sections.map((section) => {
           const isActive = currentSection === section.id
@@ -73,6 +74,35 @@ export default function NavBar() {
           )
         })}
       </ol>
-    </nav>
+      </nav>
+
+      <nav
+        aria-label="Mobile section navigation"
+        className="pointer-events-auto fixed inset-x-3 bottom-3 z-40 md:hidden"
+      >
+        <ol className="flex items-center gap-2 overflow-x-auto rounded border border-rockHighlight/60 bg-stoneBlack/90 p-2 shadow-[0_0_30px_rgba(11,12,14,0.6)] backdrop-blur-sm" role="list">
+          {sections.map((section) => {
+            const isActive = currentSection === section.id
+            return (
+              <li key={section.id} className="shrink-0">
+                <button
+                  onClick={handleClick(section.id)}
+                  className={`flex min-h-10 items-center gap-2 whitespace-nowrap rounded border px-3 py-2 font-hud text-[11px] uppercase tracking-wider transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accentGold/70 ${
+                    isActive
+                      ? 'border-accentGold/70 bg-accentGold/10 text-accentGold'
+                      : 'border-transparent text-stoneWhite/60 hover:border-rockHighlight hover:text-stoneWhite'
+                  }`}
+                  aria-label={`Go to ${section.label}`}
+                  aria-current={isActive ? 'location' : undefined}
+                >
+                  <span className={`h-2 w-2 rounded-full border border-rockHighlight/60 ${isActive ? 'bg-accentGold' : 'bg-transparent'}`} />
+                  {section.label}
+                </button>
+              </li>
+            )
+          })}
+        </ol>
+      </nav>
+    </>
   )
 }

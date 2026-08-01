@@ -102,25 +102,25 @@ export default function LoadingScreen({ onComplete }) {
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-stoneBlack text-stoneWhite">
+    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-stoneBlack px-4 text-center text-stoneWhite">
       <div className="scanlines absolute inset-0 opacity-20" />
-      <h1 className="font-heading text-4xl font-bold tracking-widest md:text-6xl">
+      <h1 className="max-w-full break-words font-heading text-3xl font-bold tracking-widest sm:text-4xl md:text-6xl">
         Muhammad Hassan Ali
       </h1>
-      <p className="mt-4 font-hud text-sm uppercase tracking-[0.4em] text-steelBlue md:text-base">
+      <p className="mt-4 font-hud text-xs uppercase tracking-[0.25em] text-steelBlue sm:text-sm sm:tracking-[0.4em] md:text-base">
         {MESSAGES[messageIndex]}
         <span className="animate-blink text-accentGold">_</span>
       </p>
       {showEnter ? (
         <button
           onClick={handleEnter}
-          className="mt-8 border border-accentGold/50 bg-stoneBlack/80 px-8 py-3 font-hud text-sm uppercase tracking-widest text-accentGold backdrop-blur-sm transition-all hover:bg-accentGold hover:text-stoneBlack focus:outline-none focus:ring-2 focus:ring-accentGold/50"
+          className="mt-8 min-h-11 border border-accentGold/50 bg-stoneBlack/80 px-6 py-3 font-hud text-xs uppercase tracking-widest text-accentGold backdrop-blur-sm transition-all hover:bg-accentGold hover:text-stoneBlack focus:outline-none focus:ring-2 focus:ring-accentGold/50 sm:px-8 sm:text-sm"
           autoFocus
         >
           Click to Enter
         </button>
       ) : (
-        <div className="mt-8 h-1 w-64 overflow-hidden border border-rockHighlight/50 bg-carvedRock/30 md:w-96">
+        <div className="mt-8 h-1 w-[min(16rem,80vw)] overflow-hidden border border-rockHighlight/50 bg-carvedRock/30 md:w-96">
           <div
             className="h-full bg-accentGold transition-all duration-100 ease-linear"
             style={{ width: `${progress}%` }}

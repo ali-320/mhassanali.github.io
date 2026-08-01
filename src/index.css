@@ -41,7 +41,24 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-width: 320px;
 }
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .scanlines::after {
+    opacity: 0.2;
+  }
+}
+
 
 /* Hide default scrollbar for immersive feel */
 ::-webkit-scrollbar {

@@ -5,12 +5,12 @@ export default function CanvasContainer() {
   return (
     <div
       className="fixed inset-0 z-0 h-screen w-screen"
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: 'pan-y' }}
     >
       <Canvas
         camera={{ position: [0, 0, 12], fov: 50, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true }}
-        dpr={[1, 1.5]}
+        dpr={[1, 1.5]} resize={{ scroll: false, debounce: { scroll: 50, resize: 100 } }}
       >
         <color attach="background" args={['#0B0C0E']} />
         <fog attach="fog" args={['#0B0C0E', 8, 45]} />

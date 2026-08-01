@@ -94,14 +94,47 @@ export default function Scene3D() {
 
   useEffect(() => {
     const canvas = gl.domElement
+    let dragStartX = null
+
     const handleWheel = (e) => {
-      if (projectsMode === 'realm') {
-        e.preventDefault()
-        rotateBoulders(e.deltaY * 0.001)
-      }
+      if (projectsMode !== 'realm') return
+      e.preventDefault()
+      rotateBoulders(e.deltaY * 0.001)
     }
+
+    const handlePointerDown = (e) => {
+      if (projectsMode !== 'realm') return
+      dragStartX = e.clientX
+    }
+
+    const handlePointerMove = (e) => {
+      if (projectsMode !== 'realm' || dragStartX === null) return
+      const deltaX = e.clientX - dragStartX
+      if (Math.abs(deltaX) < 1) return
+      rotateBoulders(deltaX * 0.006)
+      dragStartX = e.clientX
+      if (e.pointerType === 'touch') e.preventDefault()
+    }
+
+    const endPointerDrag = () => {
+      dragStartX = null
+    }
+
     canvas.addEventListener('wheel', handleWheel, { passive: false })
-    return () => canvas.removeEventListener('wheel', handleWheel)
+    canvas.addEventListener('pointerdown', handlePointerDown)
+    canvas.addEventListener('pointermove', handlePointerMove, { passive: false })
+    canvas.addEventListener('pointerup', endPointerDrag)
+    canvas.addEventListener('pointercancel', endPointerDrag)
+    canvas.addEventListener('pointerleave', endPointerDrag)
+
+    return () => {
+      canvas.removeEventListener('wheel', handleWheel)
+      canvas.removeEventListener('pointerdown', handlePointerDown)
+      canvas.removeEventListener('pointermove', handlePointerMove)
+      canvas.removeEventListener('pointerup', endPointerDrag)
+      canvas.removeEventListener('pointercancel', endPointerDrag)
+      canvas.removeEventListener('pointerleave', endPointerDrag)
+    }
   }, [gl.domElement, projectsMode, rotateBoulders])
 
   useFrame((state) => {

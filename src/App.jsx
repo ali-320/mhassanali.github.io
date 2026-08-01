@@ -95,26 +95,26 @@ function App() {
       {(isRealm || isDetail) && (
         <button
           onClick={exitRealm}
-          className="pointer-events-auto fixed left-6 top-6 z-50 flex items-center gap-2 border border-danger/50 bg-danger/10 px-4 py-2 font-hud uppercase tracking-widest text-danger backdrop-blur-sm transition-all hover:bg-danger hover:text-stoneWhite"
+          className="pointer-events-auto fixed left-4 top-4 z-50 flex min-h-11 max-w-[calc(100vw-6rem)] items-center justify-center gap-2 border border-danger/50 bg-danger/10 px-3 py-2 text-[11px] font-hud uppercase tracking-widest text-danger backdrop-blur-sm transition-all hover:bg-danger hover:text-stoneWhite sm:left-6 sm:max-w-none sm:px-4 sm:text-xs"
         >
           <span className="text-lg">←</span> Back to Gallery
         </button>
       )}
 
       <main
-        className={`relative z-10 w-full pointer-events-none transition-opacity duration-700 ${
+        className={`relative z-10 w-full pointer-events-none pb-20 transition-opacity duration-700 md:pb-0 ${
           isRealm || isDetail ? 'opacity-0' : 'opacity-100'
         }`}
         aria-hidden={isRealm || isDetail}
       >
         <section
           data-section="hero"
-          className="relative flex h-screen w-full flex-col items-center justify-center px-6 text-center"
+          className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-24 text-center sm:px-6 md:h-screen md:py-0"
         >
-          <h1 className="font-heading text-5xl font-bold tracking-wider text-stoneWhite md:text-7xl lg:text-8xl">
+          <h1 className="max-w-full break-words font-heading text-4xl font-bold tracking-wider text-stoneWhite sm:text-5xl md:text-7xl lg:text-8xl">
             Muhammad Hassan Ali
           </h1>
-          <p className="mt-4 font-hud text-lg tracking-[0.3em] text-steelBlue md:text-2xl">
+          <p className="mt-4 max-w-full font-hud text-sm leading-relaxed tracking-[0.2em] text-steelBlue sm:text-lg sm:tracking-[0.3em] md:text-2xl">
             SOFTWARE ENGINEERING STUDENT · NUST
           </p>
           <p className="mt-6 max-w-2xl font-mono text-sm text-stoneWhite/70 md:text-base">
@@ -130,16 +130,16 @@ function App() {
 
         <section
           data-section="about"
-          className="relative flex h-screen w-full flex-col justify-center px-6 md:px-20"
+          className="relative flex min-h-screen w-full flex-col justify-center px-4 py-24 sm:px-6 md:h-screen md:px-20 md:py-0"
         >
-          <div className="ml-auto max-w-2xl text-right">
-            <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">The Inscribed Path</h2>
+          <div className="ml-0 w-full max-w-2xl text-left md:ml-auto md:text-right">
+            <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">The Inscribed Path</h2>
             <p className="mt-6 font-mono text-sm leading-relaxed text-stoneWhite/80 md:text-base">
               Software Engineering student at NUST with hands-on experience in Machine Learning, Deep Learning,
               Embedded Systems, Web Development, Quantum Computing, and Software Testing. Skilled in building
               data-driven platforms, AI-based systems, and scalable software solutions.
             </p>
-            <div className="mt-10 space-y-4 font-mono text-xs text-stoneWhite/60 md:text-sm">
+            <div className="mt-8 space-y-4 font-mono text-xs leading-relaxed text-stoneWhite/60 md:mt-10 md:text-sm">
               <p>NUST — B.S. Software Engineering (2023–2027) · CGPA 3.02</p>
               <p>Punjab College — FSc Pre-Engineering (2021–2023) · 987/1100</p>
               <p>PASC Farooqabad — Matriculation (Science) (2019–2021) · 1100/1100</p>
@@ -149,18 +149,18 @@ function App() {
 
         <section
           data-section="skills"
-          className="relative flex h-screen w-full flex-col items-center justify-center px-6 text-center"
+          className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-24 text-center sm:px-6 md:h-screen md:py-0"
         >
-          <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">Pillars of Discipline</h2>
+          <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">Pillars of Discipline</h2>
           <p className="mt-4 max-w-3xl font-mono text-sm text-stoneWhite/70 md:text-base">
             Core competencies and tools carved in stone.
           </p>
-          <div className="mt-10 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="border border-rockHighlight/50 bg-carvedRock/30 p-6 backdrop-blur-sm">
+          <div className="mt-8 grid w-full max-w-5xl grid-cols-1 gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2">
+            <div className="border border-rockHighlight/50 bg-carvedRock/30 p-4 backdrop-blur-sm sm:p-6">
               <h3 className="font-hud text-lg text-accentGold">Programming</h3>
               <p className="mt-2 font-mono text-sm text-stoneWhite/80">Python, Java, C++, JavaScript, TypeScript, Linux</p>
             </div>
-            <div className="border border-rockHighlight/50 bg-carvedRock/30 p-6 backdrop-blur-sm">
+            <div className="border border-rockHighlight/50 bg-carvedRock/30 p-4 backdrop-blur-sm sm:p-6">
               <h3 className="font-hud text-lg text-accentGold">Specializations</h3>
               <p className="mt-2 font-mono text-sm text-stoneWhite/80">ML, Deep Learning, Quantum ML, Game Dev, Embedded Systems, Formal Methods, QA</p>
             </div>
@@ -176,11 +176,11 @@ function App() {
 
         <section
           data-section="experience"
-          className="relative flex h-screen w-full flex-col justify-center px-6 md:px-20"
+          className="relative flex min-h-screen w-full flex-col justify-center px-4 py-24 sm:px-6 md:h-screen md:px-20 md:py-0"
         >
-          <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">Tablets of Trial</h2>
-          <div className="mt-10 grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="border-l-4 border-accentGold bg-carvedRock/20 p-8 backdrop-blur-sm">
+          <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">Tablets of Trial</h2>
+          <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-5 sm:mt-10 sm:gap-8 md:grid-cols-2">
+            <div className="border-l-4 border-accentGold bg-carvedRock/20 p-5 backdrop-blur-sm sm:p-8">
               <h3 className="font-hud text-xl text-stoneWhite">AI-SOAR Developer Intern</h3>
               <ul className="mt-4 list-disc space-y-2 pl-5 font-mono text-sm text-stoneWhite/80">
                 <li>Built a DL trio engine (FCNN, CNN, LSTM) for cybersecurity data.</li>
@@ -188,7 +188,7 @@ function App() {
                 <li>Repo: github.com/ali-320/AI_SOAR_1</li>
               </ul>
             </div>
-            <div className="border-l-4 border-steelBlue bg-carvedRock/20 p-8 backdrop-blur-sm">
+            <div className="border-l-4 border-steelBlue bg-carvedRock/20 p-5 backdrop-blur-sm sm:p-8">
               <h3 className="font-hud text-xl text-stoneWhite">M-labs Game Development Intern</h3>
               <ul className="mt-4 list-disc space-y-2 pl-5 font-mono text-sm text-stoneWhite/80">
                 <li>Implemented game logic and mechanics.</li>
@@ -200,20 +200,20 @@ function App() {
 
         <section
           data-section="projects"
-          className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 py-24 text-center"
+          className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-28 text-center sm:px-6 sm:py-24"
         >
           <div
             className={`transition-all duration-700 ${
               isRealm || isDetail ? 'pointer-events-none opacity-0' : 'pointer-events-auto opacity-100'
             }`}
           >
-            <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">The Relic Gallery</h2>
+            <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">The Relic Gallery</h2>
             <p className="mt-4 max-w-2xl font-mono text-sm text-stoneWhite/70 md:text-base">
               Step into the realm where each artifact holds a project.
             </p>
             <button
               onClick={enterRealm}
-              className="pointer-events-auto mt-8 border border-accentGold/50 bg-accentGold/10 px-8 py-3 font-hud uppercase tracking-widest text-accentGold transition-all hover:bg-accentGold hover:text-stoneBlack"
+              className="pointer-events-auto mt-8 min-h-11 max-w-full border border-accentGold/50 bg-accentGold/10 px-5 py-3 font-hud text-xs uppercase tracking-widest text-accentGold transition-all hover:bg-accentGold hover:text-stoneBlack sm:px-8 sm:text-sm"
             >
               Enter the Project Realm
             </button>
@@ -230,10 +230,10 @@ function App() {
 
         <section
           data-section="honors"
-          className="relative flex h-screen w-full flex-col justify-center px-6 md:px-20"
+          className="relative flex min-h-screen w-full flex-col justify-center px-4 py-24 sm:px-6 md:h-screen md:px-20 md:py-0"
         >
-          <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">Stele of Virtue</h2>
-          <div className="mt-10 max-w-4xl space-y-6">
+          <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">Stele of Virtue</h2>
+          <div className="mt-8 w-full max-w-4xl space-y-4 sm:mt-10 sm:space-y-6">
             <div className="border-b border-rockHighlight/50 py-4">
               <h3 className="font-hud text-xl text-accentGold">Research</h3>
               <p className="mt-2 font-mono text-sm text-stoneWhite/80">
@@ -253,20 +253,20 @@ function App() {
 
         <section
           data-section="contact"
-          className="relative flex h-screen w-full flex-col items-center justify-center px-6 text-center"
+          className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-24 text-center sm:px-6 md:h-screen md:py-0"
         >
-          <h2 className="font-heading text-4xl font-bold text-stoneWhite md:text-6xl">Forge a Connection</h2>
-          <div className="mt-10 flex flex-col items-center gap-4 font-mono text-sm text-stoneWhite/80">
-            <a href="mailto:mhali.bese23seecs@seecs.edu.pk" className="pointer-events-auto hover:text-accentGold transition-colors">
+          <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">Forge a Connection</h2>
+          <div className="mt-8 flex w-full max-w-full flex-col items-center gap-4 break-words font-mono text-xs text-stoneWhite/80 sm:mt-10 sm:text-sm">
+            <a href="mailto:mhali.bese23seecs@seecs.edu.pk" className="pointer-events-auto max-w-full break-all hover:text-accentGold transition-colors">
               mhali.bese23seecs@seecs.edu.pk
             </a>
-            <a href="mailto:ha0407351@gmail.com" className="pointer-events-auto hover:text-accentGold transition-colors">
+            <a href="mailto:ha0407351@gmail.com" className="pointer-events-auto max-w-full break-all hover:text-accentGold transition-colors">
               ha0407351@gmail.com
             </a>
-            <a href="tel:+923229053561" className="pointer-events-auto hover:text-accentGold transition-colors">
+            <a href="tel:+923229053561" className="pointer-events-auto max-w-full break-all hover:text-accentGold transition-colors">
               +92 322-9053561
             </a>
-            <a href="https://github.com/ali-320" target="_blank" rel="noreferrer" className="pointer-events-auto hover:text-accentGold transition-colors">
+            <a href="https://github.com/ali-320" target="_blank" rel="noreferrer" className="pointer-events-auto max-w-full break-all hover:text-accentGold transition-colors">
               github.com/ali-320
             </a>
           </div>
