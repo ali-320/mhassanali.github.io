@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react'
 import { useScrollStore } from '../store/scrollStore'
 
 const sections = [
@@ -15,6 +16,19 @@ export default function NavBar() {
   const projectsMode = useScrollStore((s) => s.projectsMode)
   const lenisRef = useScrollStore((s) => s.lenisRef)
   const exitRealm = useScrollStore((s) => s.exitRealm)
+  
+  const [hasScrolled, setHasScrolled] = useState(false)
+  const [isHoveringNavbar, setIsHoveringNavbar] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true)
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleClick = (sectionId) => (e) => {
     e.preventDefault()
@@ -41,41 +55,64 @@ export default function NavBar() {
     }
   }
 
+  const shouldShowLabel = useCallback(() => {
+    if (!hasScrolled) return true
+    if (isHoveringNavbar) return true
+    return false
+  }, [hasScrolled, isHoveringNavbar])
+
   return (
     <>
+      {/* Desktop navbar */}
       <nav
         aria-label="Section navigation"
         className="pointer-events-auto fixed right-8 top-1/2 z-40 hidden -translate-y-1/2 md:block"
       >
-      <ol className="flex flex-col items-end gap-5" role="list">
-        {sections.map((section) => {
-          const isActive = currentSection === section.id
-          const labelClasses = isActive
-            ? 'font-hud text-xs uppercase tracking-widest text-accentGold transition-colors duration-300'
-            : 'font-hud text-xs uppercase tracking-widest text-stoneWhite/60 transition-colors duration-300 group-hover:text-stoneWhite'
-          const dotClasses = isActive
-            ? 'bg-accentGold'
-            : 'bg-transparent'
+        <ol 
+          className="flex flex-col items-end gap-5" 
+          role="list"
+          onMouseEnter={() => setIsHoveringNavbar(true)}
+          onMouseLeave={() => setIsHoveringNavbar(false)}
+        >
+          {sections.map((section) => {
+            const isActive = currentSection === section.id
+            const showLabel = shouldShowLabel(section.id)
+            
+            const labelClasses = isActive
+              ? 'font-hud text-xs uppercase tracking-widest text-accentGold transition-colors duration-300'
+              : 'font-hud text-xs uppercase tracking-widest text-stoneWhite/60 transition-colors duration-300'
+            
+            const dotClasses = isActive
+              ? 'bg-accentGold'
+              : 'bg-transparent'
 
-          return (
-            <li key={section.id} className="group relative flex items-center justify-end gap-4">
-              <span className={labelClasses}>
-                {section.label}
-              </span>
-              <button
-                onClick={handleClick(section.id)}
-                className="relative h-4 w-4 rounded-full border-2 border-rockHighlight/60 bg-stoneBlack/60 transition-all duration-300 hover:border-accentGold hover:bg-accentGold focus:outline-none focus-visible:ring-2 focus-visible:ring-accentGold/70"
-                aria-label={`Go to ${section.label}`}
-                aria-current={isActive ? 'location' : undefined}
+            return (
+              <li 
+                key={section.id} 
+                className="group relative flex items-center justify-end gap-4"
               >
-                <span className={`absolute inset-0.5 rounded-full transition-all duration-300 ${dotClasses}`} />
-              </button>
-            </li>
-          )
-        })}
-      </ol>
+                <span 
+                  className={`${labelClasses} transition-all duration-300 ${
+                    showLabel ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'
+                  }`}
+                >
+                  {section.label}
+                </span>
+                <button
+                  onClick={handleClick(section.id)}
+                  className="relative h-4 w-4 rounded-full border-2 border-rockHighlight/60 bg-stoneBlack/60 transition-all duration-300 hover:border-accentGold hover:bg-accentGold focus:outline-none focus-visible:ring-2 focus-visible:ring-accentGold/70"
+                  aria-label={`Go to ${section.label}`}
+                  aria-current={isActive ? 'location' : undefined}
+                >
+                  <span className={`absolute inset-0.5 rounded-full transition-all duration-300 ${dotClasses}`} />
+                </button>
+              </li>
+            )
+          })}
+        </ol>
       </nav>
 
+      {/* Mobile navbar */}
       <nav
         aria-label="Mobile section navigation"
         className="pointer-events-auto fixed inset-x-3 bottom-3 z-40 md:hidden"
