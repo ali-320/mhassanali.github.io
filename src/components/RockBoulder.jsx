@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { useScrollStore } from '../store/scrollStore'
+import { boulderStore } from '../utils/boulderStore'
 import { projects } from '../data/content'
 
 const FRAGMENT_COUNT = 40
@@ -28,7 +29,7 @@ function createFragments() {
   return fragments
 }
 
-function Boulder({ project, index, total, mode, ringRotation, selectedProject }) {
+function Boulder({ project, index, total, mode, selectedProject }) {
   const groupRef = useRef()
   const fragmentsRef = useRef()
   const [hovered, setHovered] = useState(false)
@@ -62,6 +63,9 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
   useFrame((state) => {
     if (!groupRef.current || !fragmentsRef.current) return
     const t = state.clock.getElapsedTime()
+
+    // Read rotation directly from ref-based store (no React re-render!)
+    const ringRotation = boulderStore.getRotation()
 
     let x = 0
     let z = 0
@@ -188,7 +192,7 @@ function Boulder({ project, index, total, mode, ringRotation, selectedProject })
   )
 }
 
-export default function ProjectBoulders({ mode, rotation, selectedProject }) {
+export default function ProjectBoulders({ mode, selectedProject }) {
   return (
     <>
       {projects.map((project, i) => (
@@ -198,7 +202,6 @@ export default function ProjectBoulders({ mode, rotation, selectedProject }) {
           index={i}
           total={projects.length}
           mode={mode}
-          ringRotation={rotation}
           selectedProject={selectedProject}
         />
       ))}

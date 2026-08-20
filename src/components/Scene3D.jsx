@@ -2,6 +2,7 @@ import { useRef, useMemo, useEffect } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useScrollStore } from '../store/scrollStore'
+import { boulderStore } from '../utils/boulderStore'
 import Monolith from './Monolith'
 import ProjectBoulders from './RockBoulder'
 import DustParticles from './DustParticles'
@@ -36,8 +37,6 @@ export default function Scene3D() {
   const currentSection = useScrollStore((s) => s.currentSection)
   const projectsMode = useScrollStore((s) => s.projectsMode)
   const selectedProject = useScrollStore((s) => s.selectedProject)
-  const boulderRotation = useScrollStore((s) => s.boulderRotation)
-  const rotateBoulders = useScrollStore((s) => s.rotateBoulders)
   const targetCamera = useRef(new THREE.Vector3(0, 0, 12))
   const currentCameraTarget = useRef(new THREE.Vector3(0, 0, 0))
 
@@ -92,6 +91,7 @@ export default function Scene3D() {
     }
   }, [currentSection])
 
+  // Wheel and pointer event handlers for boulder rotation
   useEffect(() => {
     const canvas = gl.domElement
     let dragStartX = null
@@ -99,7 +99,10 @@ export default function Scene3D() {
     const handleWheel = (e) => {
       if (projectsMode !== 'realm') return
       e.preventDefault()
-      rotateBoulders(e.deltaY * 0.001)
+      // Combine vertical and horizontal scroll for boulder rotation
+      // deltaX comes from touchpad horizontal swipe, deltaY from vertical scroll/wheel
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      boulderStore.addRotation(delta * 0.001)
     }
 
     const handlePointerDown = (e) => {
@@ -111,7 +114,7 @@ export default function Scene3D() {
       if (projectsMode !== 'realm' || dragStartX === null) return
       const deltaX = e.clientX - dragStartX
       if (Math.abs(deltaX) < 1) return
-      rotateBoulders(deltaX * 0.006)
+      boulderStore.addRotation(deltaX * 0.006)
       dragStartX = e.clientX
       if (e.pointerType === 'touch') e.preventDefault()
     }
@@ -135,7 +138,7 @@ export default function Scene3D() {
       canvas.removeEventListener('pointercancel', endPointerDrag)
       canvas.removeEventListener('pointerleave', endPointerDrag)
     }
-  }, [gl.domElement, projectsMode, rotateBoulders])
+  }, [gl.domElement, projectsMode])
 
   useFrame((state) => {
     let desired = targetCamera.current.clone()
@@ -152,6 +155,9 @@ export default function Scene3D() {
     desired.y += vertical
     camera.position.lerp(desired, 0.03)
     camera.lookAt(currentCameraTarget.current)
+
+    // Update boulder rotation with smooth interpolation (no React re-render!)
+    boulderStore.update(0.08)
   })
 
   return (
@@ -162,7 +168,7 @@ export default function Scene3D() {
       {pillars.map((p, i) => (
         <StonePillar key={i} position={p.position} height={p.height} color={p.color} />
       ))}
-      <ProjectBoulders mode={projectsMode} rotation={boulderRotation} selectedProject={selectedProject} />
+      <ProjectBoulders mode={projectsMode} selectedProject={selectedProject} />
     </>
   )
 }
