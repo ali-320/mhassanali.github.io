@@ -131,16 +131,14 @@ function App() {
           className="relative flex min-h-screen w-full flex-col justify-center px-4 py-24 sm:px-6 md:h-screen md:px-20 md:py-0"
         >
           <div className="ml-0 w-full max-w-2xl text-left md:ml-auto md:text-right">
-            <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">The Inscribed Path</h2>
+            <h2 className="font-heading text-3xl font-bold text-stoneWhite sm:text-4xl md:text-6xl">The Walked Path</h2>
             <p className="mt-6 font-mono text-sm leading-relaxed text-stoneWhite/80 md:text-base">
               Software Engineering student at NUST with hands-on experience in Machine Learning, Deep Learning,
               Embedded Systems, Web Development, Quantum Computing, and Software Testing. Skilled in building
-              data-driven platforms, AI-based systems, and scalable software solutions.
+              products at the intersection of hardware and software, as that is where tech truly resides.
             </p>
             <div className="mt-8 space-y-4 font-mono text-xs leading-relaxed text-stoneWhite/60 md:mt-10 md:text-sm">
               <p>NUST — B.S. Software Engineering (2023–2027) · CGPA 3.02</p>
-              <p>Punjab College — FSc Pre-Engineering (2021–2023) · 987/1100</p>
-              <p>PASC Farooqabad — Matriculation (Science) (2019–2021) · 1100/1100</p>
             </div>
           </div>
         </section>
@@ -155,7 +153,7 @@ function App() {
           </p>
           <div className="mt-8 grid w-full max-w-5xl grid-cols-1 gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2">
             <div className="border border-rockHighlight/50 bg-carvedRock/30 p-4 backdrop-blur-sm sm:p-6">
-              <h3 className="font-hud text-lg text-accentGold">Programming</h3>
+              <h3 className="font-hud text-lg text-accentGold">Programming Languages</h3>
               <p className="mt-2 font-mono text-sm text-stoneWhite/80">Python, Java, C++, JavaScript, TypeScript, Linux</p>
             </div>
             <div className="border border-rockHighlight/50 bg-carvedRock/30 p-4 backdrop-blur-sm sm:p-6">
@@ -165,8 +163,8 @@ function App() {
             <div className="border border-rockHighlight/50 bg-carvedRock/30 p-6 backdrop-blur-sm md:col-span-2">
               <h3 className="font-hud text-lg text-accentGold">Tools & Frameworks</h3>
               <p className="mt-2 font-mono text-sm text-stoneWhite/80">
-                PennyLane, k6, Locust, PyTest, Selenium, Postman, Figma, NuSMV, HOL4, Proteus, Cisco Packet Tracer,
-                AutoCAD, Wireshark, Docker, ELK Stack, Supabase, Unity
+                PennyLane, k6, Locust, PyTest, Selenium, Figma, Proteus, Packet Tracer,
+                AutoCAD, Wireshark, Docker, ELK Stack, Supabase, Unity, Colab
               </p>
             </div>
           </div>
@@ -183,7 +181,6 @@ function App() {
               <ul className="mt-4 list-disc space-y-2 pl-5 font-mono text-sm text-stoneWhite/80">
                 <li>Built a DL trio engine (FCNN, CNN, LSTM) for cybersecurity data.</li>
                 <li>Worked with Docker, ELK Stack, and CTI reports.</li>
-                <li>Repo: github.com/ali-320/AI_SOAR_1</li>
               </ul>
             </div>
             <div className="border-l-4 border-steelBlue bg-carvedRock/20 p-5 backdrop-blur-sm sm:p-8">
