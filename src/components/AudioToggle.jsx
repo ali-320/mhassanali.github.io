@@ -2,7 +2,7 @@ import { useAudioStore } from '../store/audioStore'
 import { audioManager } from '../utils/audioManager'
 import { Volume2, VolumeX, AlertCircle } from 'lucide-react'
 
-const MUSIC_URL = 'https://raw.githubusercontent.com/ali-320/resources-websites/main/Kari_Sigurdsson_-_Skyline__Epic_Modern_Heroic_Hybrid_(256k).mp3'
+const MUSIC_URL = '/skyline.mp3'
 
 export default function AudioToggle() {
   const { isMuted, isInitialized, loadError, toggleMute, clearLoadError } = useAudioStore()
